@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Python | Desafios + Curso Prático · URE Caieiras</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #0a2f6c 0%, #041a3a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #212121;
+        }
+        :root {
+            --azul-escuro: #0a2f6c;
+            --vermelho: #d32f2f;
+            --branco: #ffffff;
+            --cinza-borda: #e0e4e9;
+        }
+        .course-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: #0f1a24;
+            border-radius: 48px;
+            padding: 20px;
+            box-shadow: 0 30px 35px rgba(0,0,0,0.5), inset 0 1px 4px rgba(255,255,200,0.1);
+            border: 1px solid var(--vermelho);
+        }
+        .sheets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0a2f6ccc;
+            backdrop-filter: blur(4px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-area img {
+            max-height: 50px;
+            width: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 4px;
+        }
+        .logo-area span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffec9e;
+        }
+        .course-badge {
+            background: var(--vermelho);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        .user-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+        .user-area input, .user-area select {
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.8rem;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .save-user-btn, .reset-btn {
+            background: linear-gradient(135deg, #0a2f6c, #052050);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.1s linear;
+            font-weight: 600;
+        }
+        .save-user-btn:hover, .reset-btn:hover {
+            background: var(--vermelho);
+            transform: translateY(-2px);
+        }
+        .progress-indicator {
+            background: #1a2a3a;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #ffec9e;
+        }
+        .main-dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .colab-simulator {
+            flex: 1.2;
+            min-width: 480px;
+            background: var(--branco);
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .code-editor {
+            background: #1e1e2f;
+            color: #f8f8f2;
+            border-radius: 20px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 15px 0;
+            width: 100%;
+            border: none;
+            resize: vertical;
+        }
+        .run-btn, .solution-btn, .verify-challenge-btn {
+            background: #0a2f6c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            cursor: pointer;
+            margin-top: 8px;
+            margin-right: 10px;
+            font-weight: 600;
+        }
+        .output-area {
+            background: #2d2d3a;
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 12px;
+            font-family: monospace;
+            color: #a6e22e;
+            white-space: pre-wrap;
+        }
+        .solution-box {
+            background: #eef3fb;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 15px;
+            border-left: 5px solid var(--vermelho);
+            display: none;
+        }
+        .modules-panel {
+            flex: 1;
+            min-width: 400px;
+            background: #fefefe;
+            border-radius: 32px;
+            padding: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .module-card {
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--cinza-borda);
+            margin-bottom: 20px;
+        }
+        .module-header {
+            background: #fafbfc;
+            padding: 14px 20px;
+            border-bottom: 1px solid #eceff3;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 24px 24px 0 0;
+        }
+        .module-status { margin-left: auto; font-size: 22px; }
+        .module-body { padding: 20px; }
+        .lesson-text { font-size: 0.9rem; line-height: 1.45; margin-bottom: 16px; color: #1e2a3a; }
+        .question-box { background: #f8fafc; padding: 14px; border-radius: 20px; border-left: 5px solid var(--vermelho); margin-top: 12px; }
+        .options { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+        .option {
+            display: flex; align-items: center; gap: 12px; background: white; padding: 8px 16px;
+            border-radius: 60px; border: 1px solid #e2e8f0; cursor: pointer;
+        }
+        .option.selected { border-color: var(--azul-escuro); background: #e8f0fe; }
+        .btn-check {
+            background: linear-gradient(135deg, #0a2f6c, #052050);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        .btn-check:disabled { background: #bdc1c6; cursor: not-allowed; }
+        .feedback { font-size: 0.75rem; margin-top: 8px; font-weight: 500; }
+        .locked-message { background: #f1f3f4; padding: 10px; border-radius: 18px; text-align: center; font-size: 0.8rem; }
+        .certificate-area {
+            margin-top: 20px;
+            background: #f0f7ff;
+            border-radius: 28px;
+            padding: 20px;
+            text-align: center;
+        }
+        .btn-cert {
+            background: #0f9d58;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: #b4c8e0;
+            font-size: 0.8rem;
+            border-top: 1px solid #2c4c6e;
+        }
+        .btn-link {
+            display: inline-block;
+            background: #0a2f6c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        @media (max-width: 1000px) {
+            .main-dashboard { flex-direction: column; }
+            .colab-simulator, .modules-panel { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+<div class="course-container">
+    <div class="sheets-header">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo SEDUC">
+            <span>TECNOLOGIA 2026 - URE CAIEIRAS</span>
+        </div>
+        <div class="course-badge">🐍 Python · 4 Desafios + 20 Módulos</div>
+        <div class="user-area">
+            <input type="text" id="studentName" placeholder="Seu nome completo" value="">
+            <input type="text" id="studentCPF" placeholder="CPF (opcional)" value="">
+            <select id="schoolSelect"><option value="">Selecione sua escola</option></select>
+            <button id="saveUserBtn" class="save-user-btn">Salvar</button>
+        </div>
+        <div class="progress-indicator" id="globalProgress">0/24 módulos</div>
+        <button id="resetBtn" class="reset-btn">↺ Reiniciar Curso</button>
+    </div>
+
+    <div class="main-dashboard">
+        <!-- Simulador Colab dinâmico -->
+        <div class="colab-simulator" id="colabSimulator">
+            <h3><i class="fab fa-google"></i> Google Colab · Editor Python</h3>
+            <textarea id="codeEditor" class="code-editor" rows="12" placeholder="Digite seu código Python aqui..."></textarea>
+            <div>
+                <button id="runCodeBtn" class="run-btn"><i class="fas fa-play"></i> Executar</button>
+                <button id="showSolutionBtn" class="solution-btn"><i class="fas fa-code"></i> Ver solução</button>
+                <button id="verifyChallengeBtn" class="verify-challenge-btn" style="background:#0f9d58;"><i class="fas fa-check-circle"></i> Já resolvi e entendi</button>
+            </div>
+            <div id="outputArea" class="output-area">▶ Execute o código ou veja a solução...</div>
+            <div id="solutionArea" class="solution-box"></div>
+            <div style="margin-top: 20px;">
+                <a href="https://colab.new" target="_blank" class="btn-link"><i class="fas fa-external-link-alt"></i> Abrir Colab real</a>
+                <a href="https://bit.ly/colab-desafio" target="_blank" class="btn-link" style="margin-left: 8px;"><i class="fas fa-code"></i> Desafios extras</a>
+            </div>
+        </div>
+
+        <!-- Módulos (desafios + teóricos) -->
+        <div class="modules-panel" id="modulesContainer"></div>
+    </div>
+    <footer>✅ Python PECs · Resolva os 4 desafios no editor e avance para os módulos teóricos · Ao final, gere seu certificado.</footer>
+</div>
+
+<script>
+    // Lista de escolas
+    const escolasLista = [
+        "E.E. ADAIL JARBAS DUCLOS", "E.E. AFONSO MORENO", "E.E. ALADINO POLON", "E.E. ALBERTO GRAF – CAPITÃO",
+        "E.E. ALBINO FIORE", "E.E. ALFRIED THEODOR WEISZFLOG", "E.E. ANA MARIA GARRIDO ORLANDIN – PROF.ª",
+        "E.E. APARECIDO ROBERTO TONELLOTTI – PROF.", "E.E. ARMANDO SESTINI", "E.E. ARTHUR WEINGRILL",
+        "E.E. AZEVEDO SOARES", "E.E. BAIRRO DO ITAIM", "E.E. BAIRRO JUNDIAIZINHO", "E.E. BELÉM DA SERRA",
+        "E.E. BENEDITO APARECIDO TAVARES – PROF.", "E.E. BENEDITO FAGUNDES MARQUES",
+        "E.E. BUENO DE AZEVEDO FILHO – PROF.", "E.E. CARLOS AUGUSTO DE PÁDUA FLEURY – PROF.",
+        "E.E. CELESTINA VALENTE LENGENFELDER – PROF.ª", "E.E. CHÁCARA CAMPONESA/ Jd Vassouras",
+        "E.E. DOMINGOS CAMBIAGHI – PROF.", "E.E. ÉLCIO JOSÉ PEREIRA COTRIM – PROF.",
+        "E.E. ELVIRA PARADA MANGA – PROF.ª", "E.E. FRANCISCO GONÇALVES VIEIRA – PROFº",
+        "E.E. HERMELINA DE ALBUQUERQUE PASSARELLA – PROF.ª", "E.E. IRACI SARTORI VIEIRA DA SILVA – PROF.ª",
+        "E.E. ISAÍAS LUIZ MATIAZZO", "E.E. ISAURA DE MIRANDA BOTTO – PROFª", "E.E. ISAURA VALENTINI HANSER – PROFª",
+        "E.E. IVONE DOS ANJOS DA SILVA CAMPOS – PROF.ª", "E.E. JARDIM ALEGRIA II", "E.E. JARDIM DAS ROSAS",
+        "E.E. JARDIM SÃO FRANCISCO", "E.E. JARDIM SILVIA II", "E.E. JOAQUIM MARQUES DA SILVA SOBRINHO – TTE.",
+        "E.E. JOCIMARA VIEIRA DA SILVA – PROF.ª", "E.E. JOSÉ CARLOS DA SILVA JUNIOR",
+        "E.E. JOSÉ DE BARROS MARTINS – EDITOR", "E.E. JOSÉ PARADA – PROF.", "E.E. JOSÉ ROBERTO MELCHIOR – DR.",
+        "E.E. KÁTIA MARIA TARIFA LEME TONELLI – PROF.ª", "E.E. LENITA CORRÊA CAMARGO – PROF.ª",
+        "E.E. LUIZ ALEXANDRE DOS SANTOS – VEREADOR", "E.E. LYDIA SCALET WALKER – PROF.ª",
+        "E.E. MARIA ZEZA GOMES DE OLIVEIRA", "E.E. MARIO TOLEDO DE MORAES – DR.", "E.E. NAIR HANNICKEL ROMARO",
+        "E.E. NELSON MANZANARES – DR.", "E.E. NIDE ZAIM CARDOSO – PROF.ª", "E.E. ODARICO OLIVEIRA NASCIMENTO – PROF.",
+        "E.E. OTTO WEISZFLOG", "E.E. OZILDE ALBUQUERQUE PASSARELLA – DR.", "E.E. PARQUE CENTO E VINTE II",
+        "E.E. PAULO DUARTE", "E.E. PEDRO GALRÃO DO NASCIMENTO", "E.E. PEDRO LELIS DE SOUZA – PREFEITO",
+        "E.E. PEDRO PAULO AGUIAR", "E.E. PIETRO PETRI", "E.E. RITUCO MITANI – PROF.ª",
+        "E.E. ROGÉRIO LEVORIN – PROF.", "E.E. SUZANA DIAS", "E.E. ULYSSES SANCHES RAMIRES – PROF.",
+        "E.E. VINCENZO LOBASSI", "E.E. WALTER RIBAS DE ANDRADE – PROF.", "E.E. WALTHER WEISZFLOG",
+        "E.E. ZILTON BICUDO – PROF.", "E.E. OLINDO DÁRTORA – DR."
+    ];
+    const schoolSelect = document.getElementById('schoolSelect');
+    escolasLista.forEach(e => { let opt = document.createElement('option'); opt.value = e; opt.textContent = e; schoolSelect.appendChild(opt); });
+
+    // ---------- DESAFIOS (4 primeiros módulos) ----------
+    const desafios = [
+        { id:0, title:"🧳 Desafio 01 · Planejamento de Viagem", 
+          enunciado: "Distância: 408 km. Calcule tempo = distância / velocidade. Exiba horas e minutos.",
+          codigoInicial: "# Desafio 01\ndistancia = 408\nvelocidade = float(input('Velocidade (km/h): '))\n# Seu código aqui...",
+          solucao: `distancia = 408\nvelocidade = float(input("Digite a velocidade média: "))\ntempo_total = distancia / velocidade\nhoras = int(tempo_total)\nminutos = (tempo_total - horas) * 60\nprint(f"Distância: {distancia} km")\nprint(f"Velocidade: {velocidade} km/h")\nprint(f"Tempo: {horas} h e {minutos:.0f} min")` },
+        { id:1, title:"🏃 Desafio 02 · Maratona", 
+          enunciado: "Distância: 6 km. Calcule tempo em minutos (tempo_horas * 60).",
+          codigoInicial: "# Desafio 02\ndistancia = 6\nvelocidade = float(input('Velocidade (km/h): '))\n# Seu código...",
+          solucao: `distancia = 6\nvelocidade = float(input("Digite a velocidade média: "))\ntempo_horas = distancia / velocidade\ntempo_minutos = tempo_horas * 60\nprint(f"Tempo estimado: {tempo_minutos:.2f} minutos")` },
+        { id:2, title:"💳 Desafio 03 · Controle de Orçamento", 
+          enunciado: "Calcule saldo = renda - despesas. Exiba se economizou ou não.",
+          codigoInicial: "# Desafio 03\nrenda = float(input('Renda: '))\ndespesas = float(input('Despesas: '))\n# Seu código...",
+          solucao: `renda = float(input("Renda: "))\ndespesas = float(input("Despesas: "))\nsaldo = renda - despesas\nprint(f"Saldo: R$ {saldo:.2f}")\nif saldo > 0:\n    print("Você conseguiu economizar este mês!")\nelse:\n    print("Você gastou mais do que ganhou.")` },
+        { id:3, title:"🍔 Desafio 04 · Rodízio", 
+          enunciado: "Valor rodízio: R$59. Calcule quantas pessoas pagam (divisão inteira) e o resto.",
+          codigoInicial: "# Desafio 04\nvalor_rodizio = 59\nvalor_disponivel = float(input('Valor disponível: '))\n# Seu código...",
+          solucao: `valor_rodizio = 59\nvalor_disponivel = float(input("Valor disponível: R$ "))\npessoas = valor_disponivel // valor_rodizio\nresto = valor_disponivel % valor_rodizio\nif valor_disponivel < valor_rodizio:\n    print("Não é possível pagar nem uma pessoa.")\nelse:\n    print(f"Será possível pagar para {int(pessoas)} pessoas.")\n    print(f"Sobrará R$ {resto:.2f}")` }
+    ];
+
+    // ---------- MÓDULOS TEÓRICOS (20) com substituição prática (sugestão 2) ----------
+    const modulosTeoricos = [
+        { id:4, title:"1️⃣ O que é Python?", lesson:"Python é uma linguagem simples, com sintaxe parecida com o inglês. É usada em IA, análise de dados, automação e muito mais. Ótima para iniciantes!", question:"Qual NÃO é uma área típica do Python?", options:["Inteligência Artificial","Análise de dados","Edição de imagens profissional (Photoshop)","Automação"], correct:"Edição de imagens profissional (Photoshop)", hint:"O núcleo do Photoshop é C++." },
+        { id:5, title:"2️⃣ Google Colab", lesson:"O Google Colab é uma ferramenta online gratuita que roda Python no navegador. Basta ter uma conta Google. Acesse colab.new e comece a programar!", question:"Qual a principal vantagem do Colab para iniciantes?", options:["Não precisa instalar nada","É mais rápido que o Python local","Funciona offline","Tem tela sensível ao toque"], correct:"Não precisa instalar nada", hint:"O código roda na nuvem." },
+        { id:6, title:"3️⃣ print()", lesson:"A função print() exibe mensagens na tela. Exemplo: print('Olá mundo'). Use aspas para texto.", question:"Como exibir a mensagem 'Bom dia'?", options:["print('Bom dia')","print(Bom dia)","echo 'Bom dia'","console.log('Bom dia')"], correct:"print('Bom dia')", hint:"Use aspas simples ou duplas." },
+        { id:7, title:"4️⃣ Variáveis e tipos", lesson:"Variáveis guardam valores. Tipos: int (inteiro), float (decimal), str (texto). Ex: idade = 25; altura = 1.75; nome = 'Ana'.", question:"Qual o tipo da variável preco = 19.90?", options:["int","float","str","bool"], correct:"float", hint:"Número com ponto decimal." },
+        { id:8, title:"5️⃣ input()", lesson:"input() lê o que o usuário digita. Sempre retorna texto. Converta com int() ou float() para números.", question:"Como ler um número inteiro digitado pelo usuário?", options:["int(input())","input(int())","float(input())","input().int()"], correct:"int(input())", hint:"Converte a string para inteiro." },
+        { id:9, title:"6️⃣ Operadores aritméticos", lesson:"Operadores: + (soma), - (subtração), * (multiplicação), / (divisão), // (divisão inteira), % (resto), ** (potência).", question:"Qual operador retorna o resto da divisão?", options:["%","/","//","**"], correct:"%", hint:"Ex: 10 % 3 = 1" },
+        { id:10, title:"7️⃣ f-strings", lesson:"f-strings formatam texto com variáveis. Ex: nome = 'Ana'; print(f'Olá {nome}'). Use .2f para duas casas decimais.", question:"Como formatar um número com duas casas decimais?", options:[".2f",".2d",".2s",".2c"], correct:".2f", hint:"float com 2 casas." },
+        { id:11, title:"8️⃣ Condicionais if/else", lesson:"if condição: bloco else: bloco. Ex: if nota >= 6: print('Aprovado') else: print('Recuperação').", question:"Qual a indentação correta no Python?", options:["Espaços ou tab (consistente)","Chaves {}","Parênteses","Begin/End"], correct:"Espaços ou tab (consistente)", hint:"Python usa indentação para definir blocos." },
+        { id:12, title:"9️⃣ Laços for", lesson:"for i in range(n): repete n vezes. range(3) gera 0,1,2.", question:"Quantas vezes o loop 'for i in range(3):' executa?", options:["3","2","4","1"], correct:"3", hint:"range(3) → 0,1,2 = 3 vezes." },
+        { id:13, title:"🔟 Variáveis: guardando informações", lesson:"Uma variável é como uma caixa onde você guarda um valor. Ex: idade = 25 (idade é a variável, 25 é o valor). Você pode mudar o valor depois: idade = 26. Use nomes claros como 'nota', 'nome_aluno', 'velocidade_media'.", question:"Qual é o valor armazenado na variável após 'x = 10' e depois 'x = x + 5'?", options:["15","10","5","20"], correct:"15", hint:"x começa 10, depois soma 5, vira 15." },
+        { id:14, title:"1️⃣1️⃣ Funções def", lesson:"Funções agrupam código reutilizável. def nome(parametros): return valor. Ex: def soma(a,b): return a+b.", question:"Palavra-chave para definir função?", options:["def","function","define","func"], correct:"def", hint:"def é a abreviação de define." },
+        { id:15, title:"1️⃣2️⃣ Histórico no Colab", lesson:"Arquivo → Histórico de revisões. Útil para recuperar versões antigas.", question:"Para que serve o histórico de revisões?", options:["Recuperar versões anteriores","Executar código","Instalar bibliotecas","Compartilhar notebook"], correct:"Recuperar versões anteriores", hint:"Permite voltar no tempo." },
+        // Substituído: Módulo 16 (antigo diagnóstico) -> Atividade prática input/print
+        { id:16, title:"1️⃣3️⃣ Entrada e saída: input() e print()", lesson:"Crie um programa que pergunta o nome e a idade do usuário e exibe uma mensagem personalizada. Exemplo: <code>nome = input('Qual seu nome? ')<br>idade = input('Qual sua idade? ')<br>print(f'Olá {nome}, você tem {idade} anos!')</code>. Desafio: faça um mini chat que pergunta o que a pessoa gosta de estudar.", question:"Qual código lê o nome do usuário e exibe 'Olá [nome]' corretamente?", options:["nome = input('Nome: '); print('Olá', nome)","nome = input('Nome: '); print('Olá' + nome)","Ambas as opções estão corretas","Nenhuma das opções"], correct:"Ambas as opções estão corretas", hint:"Tanto a concatenação com vírgula quanto com '+' funcionam. f-strings também seriam válidas." },
+        // Substituído: Módulo 17 (antigo resolução comentada) -> Conversão de tipos e operações
+        { id:17, title:"1️⃣4️⃣ Conversão de tipos e operações matemáticas", lesson:"Sempre que você usar <code>input()</code>, o valor vem como texto (string). Para fazer contas, converta com <code>int()</code> ou <code>float()</code>. Ex: <code>nota1 = float(input('Nota 1: '))</code>. Exemplo prático: programa que calcula a média de três provas.", question:"O que acontece se tentar executar <code>'10' + 5</code> no Python?", options:["O resultado é 15","O resultado é '105'","Gera um erro de tipo (TypeError)","O programa trava sem mensagem"], correct:"Gera um erro de tipo (TypeError)", hint:"Não é possível somar string com inteiro diretamente. É necessário converter a string para número." },
+        { id:18, title:"1️⃣5️⃣ Python na Start Alura", lesson:"2ª série (2º bim): Introdução a Python; 3ª série (2º bim): Segurança digital com criptografia.", question:"Em qual série há unidade de Python na Start?", options:["2ª série","1ª série","3ª série (ambas)","8º ano EF"], correct:"2ª série", hint:"2ª série: Introdução a Python." },
+        { id:19, title:"1️⃣6️⃣ Projeto prático: calculadora de IMC", lesson:"IMC = peso / altura². Crie um programa que lê peso (kg) e altura (m), calcula o IMC e classifica: abaixo do peso (<18.5), normal (18.5 a 24.9), sobrepeso (25 a 29.9) ou obesidade (>=30).", question:"Qual é a fórmula correta do IMC?", options:["peso / altura**2","peso * altura","altura / peso","peso + altura"], correct:"peso / altura**2", hint:"Quadrado da altura (altura ** 2)." },
+        { id:20, title:"1️⃣7️⃣ Desafio extra: média de notas", lesson:"Crie um programa que lê três notas (0 a 10), calcula a média e exibe 'Aprovado' se média >= 6, senão 'Recuperação'. Use if/else e conversão de tipos.", question:"Qual condição verifica se o aluno foi aprovado com média >= 6?", options:["if media >= 6:","if media > 6:","if media == 6:","if media <= 6:"], correct:"if media >= 6:", hint:"Maior ou igual a 6." },
+        { id:21, title:"1️⃣8️⃣ Dicas de depuração", lesson:"Use print() para mostrar valores intermediários e entender o fluxo. Leia as mensagens de erro: SyntaxError (erro de sintaxe), NameError (variável não definida), TypeError (operação inválida entre tipos).", question:"O que significa o erro 'NameError: name 'variavel' is not defined'?", options:["A variável não foi definida antes de ser usada","Faltou um parêntese","Tipo de dado incompatível","Divisão por zero"], correct:"A variável não foi definida antes de ser usada", hint:"Verifique se você escreveu o nome corretamente e se a variável foi criada." },
+        { id:22, title:"1️⃣9️⃣ Boas práticas no Colab", lesson:"Use células de texto para documentar seu código. Salve uma cópia no Drive (Arquivo → Salvar uma cópia no Drive). Explore o histórico de revisões.", question:"Qual atalho executa a célula atual no Google Colab?", options:["Shift+Enter","Ctrl+S","Ctrl+Z","Alt+F4"], correct:"Shift+Enter", hint:"Shift+Enter executa a célula e cria uma nova abaixo." },
+        { id:23, title:"2️⃣0️⃣ Certificação e próximos passos", lesson:"Parabéns! Você concluiu todos os módulos. Continue praticando no Colab diariamente, crie seus próprios projetos e compartilhe com colegas.", question:"Como continuar aprendendo Python de forma eficaz?", options:["Praticar códigos no Colab todos os dias","Só assistir vídeos sem praticar","Ignorar exercícios","Parar por aqui"], correct:"Praticar códigos no Colab todos os dias", hint:"A prática constante é essencial para fixar os conceitos." }
+    ];
+
+    const allModules = [...desafios, ...modulosTeoricos]; // 24 módulos
+
+    let completed = new Array(24).fill(false);
+    let selectedAnswers = new Array(24).fill(null);
+    let feedbacks = new Array(24).fill("");
+    let userName = "", userCPF = "", userSchool = "";
+
+    // Controle do simulador
+    let currentModuleId = 0;
+    function updateColabForModule(moduleIdx) {
+        const isDesafio = moduleIdx < 4;
+        const editor = document.getElementById('codeEditor');
+        const outputDiv = document.getElementById('outputArea');
+        const solDiv = document.getElementById('solutionArea');
+        if(isDesafio) {
+            editor.value = desafios[moduleIdx].codigoInicial;
+            solDiv.style.display = 'none';
+            outputDiv.innerHTML = "▶ Digite seu código e clique em Executar ou veja a solução.";
+            // Configurar botões
+            const runBtn = document.getElementById('runCodeBtn');
+            const solBtn = document.getElementById('showSolutionBtn');
+            const verifyBtn = document.getElementById('verifyChallengeBtn');
+            // Remove listeners antigos clonando
+            const newRun = runBtn.cloneNode(true);
+            const newSol = solBtn.cloneNode(true);
+            const newVerify = verifyBtn.cloneNode(true);
+            runBtn.parentNode.replaceChild(newRun, runBtn);
+            solBtn.parentNode.replaceChild(newSol, solBtn);
+            verifyBtn.parentNode.replaceChild(newVerify, verifyBtn);
+            // Adiciona novos listeners
+            newRun.addEventListener('click', () => {
+                let saida = "⚠️ Simulação no ambiente de estudo.\n\n";
+                if(moduleIdx === 0) saida += `Distância: 408 km\nVelocidade: 80 km/h\nTempo: 5 horas e 6 minutos`;
+                else if(moduleIdx === 1) saida += `Tempo estimado: 36.00 minutos`;
+                else if(moduleIdx === 2) saida += `Saldo: R$ -550.00\nVocê gastou mais do que ganhou.`;
+                else if(moduleIdx === 3) saida += `Será possível pagar para 3 pessoas.\nSobrará R$ 23.00`;
+                outputDiv.innerHTML = saida;
+            });
+            newSol.addEventListener('click', () => {
+                solDiv.innerHTML = `<strong>🧠 Solução comentada:</strong><br><pre style="background:#1e1e2f; color:#f8f8f2; padding:12px; border-radius:16px; overflow-x:auto;">${desafios[moduleIdx].solucao}</pre>`;
+                solDiv.style.display = 'block';
+            });
+            newVerify.addEventListener('click', () => {
+                if(completed[moduleIdx]) {
+                    alert("Você já concluiu este desafio! Avance para o próximo módulo.");
+                    return;
+                }
+                if(confirm("Você resolveu o desafio e entendeu a solução? Clique em OK para marcar como concluído e liberar o próximo módulo.")) {
+                    completed[moduleIdx] = true;
+                    saveProgress();
+                    renderModules();
+                    updateProgress();
+                    alert("Desafio concluído! O próximo módulo foi liberado.");
+                }
+            });
+        } else {
+            // Módulo teórico: mostra exemplo simples
+            editor.value = `# Exemplo prático: \n# Digite um código relacionado ao módulo e clique em "Executar" para simular.`;
+            solDiv.style.display = 'none';
+            outputDiv.innerHTML = "▶ Módulo teórico. Responda a questão abaixo para avançar.";
+            const runBtn = document.getElementById('runCodeBtn');
+            const solBtn = document.getElementById('showSolutionBtn');
+            const verifyBtn = document.getElementById('verifyChallengeBtn');
+            const newRun = runBtn.cloneNode(true);
+            const newSol = solBtn.cloneNode(true);
+            const newVerify = verifyBtn.cloneNode(true);
+            runBtn.parentNode.replaceChild(newRun, runBtn);
+            solBtn.parentNode.replaceChild(newSol, solBtn);
+            verifyBtn.parentNode.replaceChild(newVerify, verifyBtn);
+            newRun.addEventListener('click', () => { outputDiv.innerHTML = "▶ Simulação: código executado (ambiente de estudo)."; });
+            newSol.addEventListener('click', () => { solDiv.innerHTML = "💡 Dica: Este é um módulo teórico. Responda a questão para avançar."; solDiv.style.display = 'block'; });
+            newVerify.addEventListener('click', () => { alert("Para avançar neste módulo teórico, responda a questão de múltipla escolha abaixo e clique em 'Verificar e Avançar'."); });
+        }
+    }
+
+    function renderModules() {
+        let container = document.getElementById('modulesContainer');
+        if(!container) return;
+        container.innerHTML = "";
+        allModules.forEach((mod, idx) => {
+            let accessible = isAccessible(idx);
+            let done = completed[idx];
+            let card = document.createElement('div');
+            card.className = 'module-card';
+            card.style.opacity = (accessible || done) ? "1" : "0.7";
+            let header = document.createElement('div');
+            header.className = 'module-header';
+            header.innerHTML = `<span>${mod.title}</span><div class="module-status">${done ? '✅' : (accessible ? '🔓' : '🔒')}</div>`;
+            let body = document.createElement('div');
+            body.className = 'module-body';
+            let lessonText = mod.enunciado ? mod.enunciado : mod.lesson;
+            body.innerHTML = `<div class="lesson-text">${lessonText}</div>`;
+            
+            // Se for módulo teórico (tem question), adiciona as opções
+            if(mod.question) {
+                let qBox = document.createElement('div');
+                qBox.className = 'question-box';
+                qBox.innerHTML = `<strong>❓ ${mod.question}</strong>`;
+                let optsDiv = document.createElement('div');
+                optsDiv.className = 'options';
+                mod.options.forEach(opt => {
+                    let optEl = document.createElement('div');
+                    optEl.className = `option ${selectedAnswers[idx] === opt ? 'selected' : ''}`;
+                    optEl.innerHTML = `<span style="flex:1">${opt}</span>`;
+                    optEl.addEventListener('click', () => {
+                        if(done || !accessible) { if(!accessible && !done) alert("Complete o módulo anterior!"); return; }
+                        selectedAnswers[idx] = opt;
+                        renderModules();
+                    });
+                    optsDiv.appendChild(optEl);
+                });
+                let btn = document.createElement('button');
+                btn.textContent = "Verificar e Avançar";
+                btn.className = "btn-check";
+                if(done) { btn.disabled=true; btn.textContent="✓ Concluído"; }
+                else if(!accessible && !done) { btn.disabled=true; btn.textContent="🔒 Trancado"; }
+                let feedbackSpan = document.createElement('div');
+                feedbackSpan.className = 'feedback';
+                if(feedbacks[idx]) feedbackSpan.innerHTML = feedbacks[idx];
+                btn.onclick = () => {
+                    if(done) return;
+                    if(!accessible) { feedbacks[idx] = "🔐 Finalize o anterior."; renderModules(); return; }
+                    let selected = selectedAnswers[idx];
+                    if(!selected) { feedbacks[idx] = "⚠️ Selecione uma opção."; renderModules(); return; }
+                    if(selected === mod.correct) {
+                        if(!completed[idx]) {
+                            completed[idx]=true;
+                            saveProgress();
+                            feedbacks[idx] = "✅ Correto! Módulo concluído.";
+                            renderModules();
+                            updateProgress();
+                        } else { feedbacks[idx]="✅ Já concluído."; renderModules(); }
+                    } else {
+                        feedbacks[idx] = `❌ Incorreto. Dica: ${mod.hint}`;
+                        renderModules();
+                    }
+                };
+                qBox.appendChild(optsDiv);
+                qBox.appendChild(btn);
+                qBox.appendChild(feedbackSpan);
+                body.appendChild(qBox);
+            } else if(idx < 4) {
+                // Desafio: mostrar botão de avanço especial
+                let info = document.createElement('div');
+                info.className = 'question-box';
+                info.innerHTML = `<p>📝 Resolva este desafio no editor ao lado. Após resolver, clique em <strong>"Já resolvi e entendi"</strong> para concluir e liberar o próximo módulo.</p>`;
+                body.appendChild(info);
+            }
+            
+            if(!accessible && !done && idx>0) {
+                let lock = document.createElement('div');
+                lock.className = 'locked-message';
+                lock.innerText = "🔒 Complete o módulo anterior para liberar.";
+                body.appendChild(lock);
+            }
+            card.appendChild(header);
+            card.appendChild(body);
+            container.appendChild(card);
+        });
+        updateProgress();
+        // Atualiza simulador baseado no primeiro módulo não concluído
+        let next = completed.findIndex(c=>!c);
+        if(next === -1) next = 23;
+        currentModuleId = next;
+        updateColabForModule(next);
+    }
+
+    function loadUser() {
+        let n = localStorage.getItem("python_user_name");
+        let c = localStorage.getItem("python_user_cpf");
+        let s = localStorage.getItem("python_user_school");
+        if(n) { document.getElementById('studentName').value = n; userName = n; }
+        if(c) { document.getElementById('studentCPF').value = c; userCPF = c; }
+        if(s) { document.getElementById('schoolSelect').value = s; userSchool = s; }
+    }
+    function saveUser() {
+        userName = document.getElementById('studentName').value.trim();
+        userCPF = document.getElementById('studentCPF').value.trim();
+        userSchool = document.getElementById('schoolSelect').value;
+        if(userName) localStorage.setItem("python_user_name", userName);
+        if(userCPF) localStorage.setItem("python_user_cpf", userCPF);
+        if(userSchool) localStorage.setItem("python_user_school", userSchool);
+        alert("Dados salvos!");
+    }
+    function loadProgress() {
+        let saved = localStorage.getItem("python_course_24");
+        if(saved) { try { let arr = JSON.parse(saved); if(arr.length===24) completed = arr; } catch(e){} }
+    }
+    function saveProgress() { localStorage.setItem("python_course_24", JSON.stringify(completed)); }
+    function isAccessible(idx) { return idx===0 || completed[idx-1]===true; }
+    function updateProgress() {
+        let done = completed.filter(v=>v===true).length;
+        document.getElementById('globalProgress').innerHTML = `${done}/24 módulos`;
+        if(done===24) showCertBtn(); else hideCertBtn();
+    }
+    let certBtnDiv = null;
+    function showCertBtn() {
+        if(!certBtnDiv) {
+            let panel = document.getElementById('modulesContainer');
+            let div = document.createElement('div');
+            div.id = 'certBtnDiv';
+            div.className = 'certificate-area';
+            div.innerHTML = `<button id="certBtn" class="btn-cert">🎓 Gerar Certificado de Conclusão 🎓</button>`;
+            panel.appendChild(div);
+            document.getElementById('certBtn')?.addEventListener('click', emitirCertificado);
+            certBtnDiv = div;
+        }
+    }
+    function hideCertBtn() { if(certBtnDiv) certBtnDiv.remove(); certBtnDiv=null; }
+    function emitirCertificado() {
+        if(completed.every(v=>v===false)) { alert("Complete todos os 24 módulos!"); return; }
+        if(!userName || !userSchool) { alert("Preencha nome e escola e salve."); return; }
+        let cpfHtml = userCPF ? `<div style="font-size:16px; background:#f1f3f4; padding:6px 16px; border-radius:30px; display:inline-block;">CPF: ${userCPF}</div>` : '';
+        let win = window.open("","_blank");
+        win.document.write(`<html><head><title>Certificado Python - URE Caieiras</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Inter',sans-serif;background:linear-gradient(145deg,#0a2f6c 0%,#041a3a 100%);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}.cert-box{max-width:850px;background:white;border-radius:40px;padding:48px;text-align:center;border:12px solid #d32f2f;box-shadow:0 25px 40px rgba(0,0,0,0.3);}.logo-area{display:flex;justify-content:center;gap:20px;margin-bottom:20px;}.logo-area img{max-height:60px;background:white;border-radius:16px;padding:5px;}.logo-text{font-size:28px;font-weight:700;color:#0a2f6c;}h1{color:#202124;margin:20px 0 10px;}.nome{font-size:32px;font-weight:bold;border-bottom:3px solid #d32f2f;display:inline-block;margin:20px 0;padding:0 20px;color:#0a2f6c;}.escola{font-size:18px;margin:15px 0;background:#f1f3f4;padding:8px 20px;border-radius:40px;display:inline-block;}.descricao{font-size:15px;margin:20px 0;line-height:1.5;color:#3c4043;}.footer-cert{margin-top:35px;font-size:12px;border-top:1px solid #ddd;padding-top:20px;display:flex;justify-content:space-between;}</style></head><body><div class="cert-box"><div class="logo-area"><img src="https://i.ibb.co/0p01LzxB/logo3de.jpg"><div class="logo-text">Python PECs · URE Caieiras</div></div><h1>CERTIFICADO DE FORMAÇÃO</h1><p>Certificamos que</p><div class="nome">${userName}</div>${cpfHtml}<div class="escola">${userSchool}</div><div class="descricao">Concluiu com êxito o curso <strong>"Python - 4 Desafios Práticos + 20 Módulos Teóricos SIMPLES"</strong>, resolvendo os desafios de viagem, maratona, orçamento e rodízio no ambiente Google Colab, e assimilando os fundamentos da linguagem mais simples.</div><div class="footer-cert"><span>Emitido: ${new Date().toLocaleDateString('pt-BR')}</span><span>Formação Continuada URE-CAIEIRAS</span></div></div></body></html>`);
+        win.document.close(); win.print();
+    }
+
+    function resetCourse() {
+        if(confirm("Reiniciar todo o progresso? Perderá respostas e avanços.")) {
+            completed.fill(false);
+            selectedAnswers.fill(null);
+            feedbacks.fill("");
+            saveProgress();
+            renderModules();
+            hideCertBtn();
+            alert("Curso reiniciado.");
+        }
+    }
+
+    document.getElementById('saveUserBtn').addEventListener('click', saveUser);
+    document.getElementById('resetBtn').addEventListener('click', resetCourse);
+    loadUser();
+    loadProgress();
+    renderModules();
+</script>
+</body>
+</html>
